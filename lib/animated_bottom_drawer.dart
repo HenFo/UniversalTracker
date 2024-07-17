@@ -3,10 +3,15 @@ import 'package:flutter/material.dart';
 class AnimatedBottomDrawer extends StatefulWidget {
   final Widget child;
   final double dragHandleHeight;
+  /// background color of drawer
   final Color color;
+  /// color of the handle
   final Color handleColor;
+  /// height to which the drawer is animated when clicked
   final double animationHeight;
+  /// height to which the drawer can open
   final double maxDrawerHeight;
+
   const AnimatedBottomDrawer(
       {super.key,
       required this.child,
@@ -62,7 +67,8 @@ class _AnimatedBottomDrawerState extends State<AnimatedBottomDrawer>
                     _heightAnimationController.value =
                         _heightAnimationController.value -
                             details.delta.dy / context.size!.height;
-                    if (_heightAnimationController.value > widget.maxDrawerHeight) {
+                    if (_heightAnimationController.value >
+                        widget.maxDrawerHeight) {
                       _heightAnimationController.value = widget.maxDrawerHeight;
                     }
                     if (_heightAnimationController.value < minSheetPosition) {
@@ -86,7 +92,15 @@ class _AnimatedBottomDrawerState extends State<AnimatedBottomDrawer>
                 },
               ),
               Expanded(
-                  child: ColoredBox(color: widget.color, child: widget.child)),
+                  child: SingleChildScrollView(
+                child: ColoredBox(
+                  color: widget.color,
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(maxHeight: constraints.maxHeight * (widget.maxDrawerHeight - minSheetPosition)),
+                    child: widget.child,
+                  ),
+                ),
+              )),
             ],
           ),
         ),
@@ -96,7 +110,7 @@ class _AnimatedBottomDrawerState extends State<AnimatedBottomDrawer>
 
   void _animateSheetOpen() {
     _heightAnimationController.animateTo(widget.animationHeight,
-        curve: Curves.easeOutBack, duration: Durations.extralong4);
+        curve: Curves.easeOutExpo, duration: Durations.extralong3);
   }
 
   void _animateSheetClose(double minSheetPosition) {

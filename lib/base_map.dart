@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:universal_tracker/animated_bottom_drawer.dart';
+import 'package:universal_tracker/map_widgets.dart';
 import 'package:universal_tracker/tile_providers.dart';
 
 class BaseMap extends StatelessWidget {
@@ -23,6 +24,7 @@ class BaseMap extends StatelessWidget {
                   rotationThreshold: 10, enableMultiFingerGestureRace: true),
             ),
             children: [openStreetMapTileLayer]),
+        // const MapButtons(),
         const AnimatedBottomDrawer(
             animationHeight: 0.5,
             maxDrawerHeight: 0.5,
@@ -38,44 +40,26 @@ class ControlPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            children: [
-              // Left column with buttons
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _recordButtonFactory(RecordButtonType.record),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  _recordButtonFactory(RecordButtonType.pause),
-                ],
-              ),
-              const SizedBox(width: 40),
-              // Right column with text fields
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // First text field
-                    _displayTrackingData("Tracking Data 1"),
-                    const SizedBox(height: 20),
-                    _displayTrackingData("Tracking Data 2"),
-                    const SizedBox(height: 20),
-                    _displayTrackingData("Tracking Data 3"),
-                    
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+    return PageView(
+        children: const [RecordingController(), TrackingDataPage()]);
+  }
+}
+
+class TrackingDataPage extends StatelessWidget {
+  const TrackingDataPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        // First text field
+        _displayTrackingData("Tracking Data 1"),
+        const SizedBox(height: 20),
+        _displayTrackingData("Tracking Data 2"),
+        const SizedBox(height: 20),
+        _displayTrackingData("Tracking Data 3"),
+      ],
     );
   }
 
@@ -89,6 +73,31 @@ class ControlPanel extends StatelessWidget {
           style: const TextStyle(color: Colors.white, fontSize: 18),
         ),
       ),
+    );
+  }
+}
+
+enum RecordButtonType { record, pause, stop }
+
+class RecordingController extends StatefulWidget {
+  const RecordingController({super.key});
+
+  @override
+  State<RecordingController> createState() => _RecordingControllerState();
+}
+
+class _RecordingControllerState extends State<RecordingController> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _recordButtonFactory(RecordButtonType.record),
+        const SizedBox(
+          height: 20,
+        ),
+        _recordButtonFactory(RecordButtonType.pause),
+      ],
     );
   }
 
@@ -139,5 +148,3 @@ class ControlPanel extends StatelessWidget {
     );
   }
 }
-
-enum RecordButtonType { record, pause, stop }
