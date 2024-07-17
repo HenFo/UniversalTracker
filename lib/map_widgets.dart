@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:geolocator/geolocator.dart';
+
+import 'permission_functions.dart';
 
 class MapButtons extends StatelessWidget {
-  const MapButtons({super.key});
+  final MapController mapController;
+  const MapButtons({
+    super.key,
+    required this.mapController,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +20,8 @@ class MapButtons extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const LocationButton(),
+            CompassButton(mapController: mapController),
+            // const LocationButton(),
             IconButton.filled(
               onPressed: () {},
               icon: const Icon(Icons.question_mark),
@@ -21,6 +30,35 @@ class MapButtons extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class CompassButton extends StatefulWidget {
+  final MapController mapController;
+
+  const CompassButton({super.key, required this.mapController});
+
+  @override
+  State<CompassButton> createState() => _CompassButtonState();
+}
+
+class _CompassButtonState extends State<CompassButton> {
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<MapEvent>(
+        stream: widget.mapController.mapEventStream,
+        builder: (context, snapshot) {
+          return Transform.rotate(
+              angle: snapshot.data?.camera.rotationRad ?? 0,
+              child: IconButton.filled(
+                onPressed: () => rotateNorth(widget.mapController),
+                icon: const Icon(Icons.north),
+              ));
+        });
+  }
+
+  void rotateNorth(MapController mapController) {
+    mapController.rotate(0);
   }
 }
 
@@ -47,6 +85,7 @@ class _LocationButtonState extends State<LocationButton> {
           setState(() {
             locationOn = true;
           });
+          // getLocationPermission();
         }
       },
       icon:

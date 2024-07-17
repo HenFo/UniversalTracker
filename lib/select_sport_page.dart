@@ -22,7 +22,7 @@ class SportsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => const BaseMap()));
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => BaseMapWithTracker()));
         },
       child: Card(
         child: Padding(
