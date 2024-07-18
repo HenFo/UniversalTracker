@@ -3,12 +3,16 @@ import 'package:flutter/material.dart';
 class AnimatedBottomDrawer extends StatefulWidget {
   final Widget child;
   final double dragHandleHeight;
+
   /// background color of drawer
   final Color color;
+
   /// color of the handle
   final Color handleColor;
+
   /// height to which the drawer is animated when clicked
   final double animationHeight;
+
   /// height to which the drawer can open
   final double maxDrawerHeight;
 
@@ -96,7 +100,9 @@ class _AnimatedBottomDrawerState extends State<AnimatedBottomDrawer>
                 child: ColoredBox(
                   color: widget.color,
                   child: ConstrainedBox(
-                    constraints: BoxConstraints(maxHeight: constraints.maxHeight * (widget.maxDrawerHeight - minSheetPosition)),
+                    constraints: BoxConstraints(
+                        maxHeight: constraints.maxHeight *
+                            (widget.maxDrawerHeight - minSheetPosition)),
                     child: widget.child,
                   ),
                 ),
@@ -152,7 +158,13 @@ class Grabber extends StatelessWidget {
               ),
             ),
             Container(
-              color: color,
+              decoration: BoxDecoration(
+                  color: color,
+                  border: Border.all(
+                    color: color,
+                    width: 1,
+                    strokeAlign: BorderSide.strokeAlignCenter
+                  )),
               height: height - 20,
               width: double.infinity,
             )

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 
-import 'permission_functions.dart';
+import '../utils/permission_functions.dart';
 
 class MapButtons extends StatelessWidget {
   final MapController mapController;

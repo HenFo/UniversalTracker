@@ -30,11 +30,11 @@ class TrackingData {
       this.fullTime = Duration.zero,
       this.stillTime = Duration.zero,
       this.averageSpeed = 0}) {
-        this.timestamp = timestamp ?? DateTime.now();
-      }
+    this.timestamp = timestamp ?? DateTime.now();
+  }
 }
 
-class Recorder with ChangeNotifier {  
+class Recorder with ChangeNotifier {
   StreamSubscription<Position>? _positionStreamSubscription;
   List<TrackingData> _record = [];
   TrackingData get lastData => _data;
@@ -110,22 +110,25 @@ class Recorder with ChangeNotifier {
       _data = pd;
       notifyListeners();
     });
+    notifyListeners();
   }
 
   void stopRecording() {
     this._positionStreamSubscription?.cancel().then((value) {
       // TODO record speichern
       _record = [];
+      _positionStreamSubscription = null;
+      notifyListeners();
     });
   }
 
   void pauseRecording() {
-    return;
     this._positionStreamSubscription?.pause();
+    notifyListeners();
   }
 
   void resumeRecording() {
-    return;
     this._positionStreamSubscription?.resume();
+    notifyListeners();
   }
 }
